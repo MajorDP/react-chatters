@@ -1,0 +1,107 @@
+.container {
+  border: 1px solid gray;
+  height: 87%;
+  overflow-y: auto;
+}
+
+.friendsLabel {
+  margin: auto;
+  text-align: center;
+  border-bottom: 1px solid gray;
+}
+
+.requests li {
+  list-style-type: none;
+
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid white;
+}
+
+.requests li span {
+  margin-left: 2%;
+}
+
+.requests li div {
+  width: 30%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.requests li div button {
+  border: 1px solid black;
+  width: 50%;
+}
+
+.requests li div button:nth-child(1) {
+  background-color: rgb(42, 114, 42);
+}
+.requests li div button:nth-child(2) {
+  background-color: rgb(141, 38, 38);
+}
+
+.friendOptions form {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid gray;
+}
+
+.friendOptions form button {
+  background-color: transparent;
+  border: 0;
+  margin: 0.1rem;
+}
+
+.emoji {
+  background-color: transparent;
+  color: red;
+}
+
+.friendOptions input {
+  width: 100%;
+  height: 1.5rem;
+  border: 1px solid gray;
+  background-color: rgb(121, 121, 121);
+}
+
+.friendOptions input::placeholder {
+  color: black;
+  padding: 1%;
+}
+
+.friend {
+  display: flex;
+  border-bottom: 1px solid gray;
+  padding-right: 1rem;
+  font-size: 0.8rem;
+}
+
+.friend img {
+  width: 70px;
+  height: 70px;
+  border: 1px solid goldenrod;
+  border-radius: 50%;
+  margin: 10px;
+}
+
+.friendInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.friendInfo p {
+  margin: auto;
+  margin-left: 0;
+  font-size: 90%;
+}
+
+.friendInfo p:nth-child(1) {
+  font-size: 100%;
+  color: rgb(212, 216, 221);
+}
+
+.friendInfo p:nth-child(2) {
+  font-style: italic;
+  color: rgb(195, 198, 202);
+}

@@ -1,0 +1,46 @@
+.container {
+  width: 33%;
+  background-color: rgba(0, 0, 0, 0.404);
+}
+
+.friendInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 20%;
+}
+
+.friendInfo img {
+  width: 120px;
+  height: 120px;
+  border: 1px solid goldenrod;
+  border-radius: 50%;
+  margin-bottom: 10%;
+}
+
+.friendInfo h3,
+p {
+  margin-bottom: 10%;
+}
+
+.friendInfo span {
+  color: rgba(60, 255, 0, 0.644);
+}
+
+.friendOptions {
+  width: 95%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.removeBtn,
+.blockBtn {
+  width: 45%;
+  font-weight: 500;
+  font-size: medium;
+  background-color: red;
+  border: 0;
+}

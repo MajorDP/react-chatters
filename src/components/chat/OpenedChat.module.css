@@ -1,0 +1,108 @@
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.container h3 {
+  padding-left: 2%;
+  padding-top: 1%;
+  background: linear-gradient(to left, transparent, rgb(53, 53, 53));
+  border-bottom: 1px solid rgba(128, 128, 128, 0.301);
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 94.4%;
+  background-color: rgba(0, 0, 0, 0.151);
+  overflow-y: scroll;
+}
+
+.chatMessages {
+  flex: 1;
+}
+
+.chatInput {
+  color: black;
+  width: 100%;
+  height: 2rem;
+  box-sizing: border-box;
+}
+
+.chatInput input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.userImg {
+  min-width: 70px;
+  max-width: 70px;
+  min-height: 70px;
+  max-height: 70px;
+  border: 1px solid goldenrod;
+  border-radius: 50%;
+  margin: 10px;
+}
+
+.friendMessage,
+.userMessage {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 2%;
+}
+
+.friendMessage {
+  justify-content: flex-start;
+}
+
+.userMessage {
+  justify-content: flex-end;
+}
+
+.friendMessage img {
+  margin-right: 10px;
+}
+
+.userMessage img {
+  margin-left: 10px;
+}
+
+.container img:not(.userImg) {
+  display: block;
+  max-width: 500px;
+  max-height: 500px;
+  margin: 0;
+}
+
+.msgContentFriend,
+.msgContentUser {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 80%;
+}
+
+.msgContentFriend {
+  align-items: flex-start;
+  background-color: #dad6d6;
+}
+
+.msgContentUser {
+  align-items: flex-end;
+  background-color: #9dd6bd;
+}
+
+.date {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: rgb(41, 40, 40);
+  margin-bottom: 1rem;
+}
+
+.message {
+  font-size: 1rem;
+  color: #333;
+}
