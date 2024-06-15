@@ -1,5 +1,7 @@
 # ReactChatters
 
+Built using React Query and Supabase
+
 !!!IMPORTANT!!!
 
 FOR THE CHATS TO WORK IN REALTIME, the server.js file MUST BE started via:
