@@ -1,0 +1,151 @@
+.container {
+  background-color: rgba(0, 0, 0, 0.425);
+  width: 80%;
+}
+
+.container h3 {
+  padding-left: 2%;
+  padding-top: 1%;
+  background: linear-gradient(to left, transparent, rgb(80, 80, 80));
+  border-bottom: 1px solid rgba(128, 128, 128, 0.301);
+}
+
+.userInfo {
+  display: flex;
+  margin: 1rem;
+}
+
+.pfp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pfp img {
+  width: 400px;
+  height: 400px;
+  border: 2px solid black;
+  border-radius: 50%;
+
+  margin-left: 1rem;
+  margin-right: 2rem;
+}
+
+.pfp label {
+  margin: 0.3rem;
+  padding: 0.3rem;
+  border: 1px solid whitesmoke;
+  border-radius: 20px;
+}
+
+.userInfo div {
+  display: flex;
+  flex-direction: column;
+
+  margin-top: 3rem;
+  margin-left: 3rem;
+}
+
+.userInfo div input {
+  color: black;
+}
+
+.infoLabel {
+  display: block;
+  color: gray;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.userInfo button {
+  width: 50%;
+  margin: 0 auto;
+  font-size: 1rem;
+
+  border: 1px solid whitesmoke;
+  border-radius: 5px;
+  background-color: rgb(78, 78, 78);
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .pfp img {
+    width: 300px;
+    height: 300px;
+  }
+
+  .userInfo div:nth-child(2) {
+    margin: auto;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .container {
+    width: 70%;
+  }
+  .pfp img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .userInfo div {
+    width: 30%;
+  }
+
+  .userInfo label {
+    font-size: 0.7rem;
+    text-align: center;
+  }
+
+  .userInfo input {
+    width: 9.5rem;
+  }
+
+  .userInfo p {
+    text-align: start;
+  }
+
+  .userInfo div button {
+    width: 100%;
+    margin: auto;
+  }
+
+  .infoLabel {
+    width: 9.5rem;
+  }
+}
+@media (max-width: 480px) {
+  .container {
+    width: 70%;
+  }
+  .pfp img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .userInfo div {
+    width: 20%;
+    margin: auto;
+  }
+
+  .userInfo label {
+    font-size: 0.5rem;
+    text-align: start;
+  }
+
+  .userInfo input {
+    width: 5rem;
+  }
+
+  .userInfo input::placeholder {
+    visibility: hidden;
+  }
+
+  .userInfo p {
+    text-align: start;
+    font-size: 0.6rem;
+  }
+
+  .infoLabel {
+    width: 6rem;
+  }
+}

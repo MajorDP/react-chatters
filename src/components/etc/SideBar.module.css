@@ -1,4 +1,25 @@
 .container {
-  height: 100.5%;
+  height: 99%;
   width: 20%;
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .container {
+    width: 25%;
+    height: 99%;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .container {
+    height: 38.8rem;
+    width: 30%;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    height: 38.8rem;
+    width: 30%;
+  }
 }

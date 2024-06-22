@@ -1,37 +1,52 @@
 import { io } from "socket.io-client";
-import { useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import styles from "./OpenedChat.module.css";
 import {
   useGetFriendsChat,
   useSendMessage,
 } from "../../services/useChatQueries";
 import { useQueryClient } from "react-query";
+import { useForm } from "react-hook-form";
+import { Context } from "./ChatContainer";
 
-function OpenedChat({ selectedFriend, currentUser }) {
-  const queryClient = useQueryClient();
-  const socket = io("http://localhost:3000");
+function OpenedChat() {
+  const { selectedFriend, currentUser, setUserDetails, userDetails } =
+    useContext(Context);
+
+  const { register, handleSubmit, reset } = useForm();
 
   const selectedFriendId = selectedFriend.friend.friendId;
-
   const currentUserId = currentUser.id;
-
-  const [message, setMessage] = useState("");
-
   const { isLoading, data, error } = useGetFriendsChat(
     selectedFriendId,
     currentUserId
   );
+  console.log(selectedFriend.friend);
+
+  const chatRef = useRef(null);
+
+  //scroll the chat to the bottom
+  useEffect(() => {
+    const scrollableDiv = chatRef.current;
+    if (scrollableDiv) {
+      scrollableDiv.scrollTop = scrollableDiv.scrollHeight;
+    }
+  }, [data]);
+
+  const queryClient = useQueryClient();
+  const socket = io("http://localhost:3000");
 
   const { mutate: send, data: msgData, error: sendMsgErr } = useSendMessage();
 
   if (isLoading) return <div>Loading chat...</div>;
 
   const currentChat =
-    data.friendChats.chats.length > 0 ? data.friendChats.chats : [];
+    data?.friendChats?.chats.length > 0 ? data.friendChats.chats : [];
 
   //CHATROOM ID FOR SOCKET.IO TO MAKE THE CHAT WORK IN REAL TIME
-  const currentChatRoom = data.friendChats.chatRoom;
+  const currentChatRoom = data.friendChats?.chatRoom;
   const friendId = selectedFriendId;
+
   socket.on("connect", () => {
     //the client receives this from the server
     socket.on("received-message", (chatRoom) => {
@@ -42,27 +57,45 @@ function OpenedChat({ selectedFriend, currentUser }) {
     });
   });
 
-  const chatRoom = data.friendChats.chatRoom;
-  function onSend(e, message) {
-    e.preventDefault();
-    if (message === "") return;
+  const chatRoom = data.friendChats?.chatRoom;
+  function onSend(data) {
+    const messageImg = data.messageImg[0];
+    const message = data.message;
+
+    if (message === "" && messageImg === undefined) return;
 
     send(
-      { message, currentUserId, friendId: selectedFriendId },
+      { message, messageImg, currentUserId, friendId: selectedFriendId },
       {
         onSettled: () => {
           socket.emit("message-sent", chatRoom); //upon finishing the posting query (send) for the message, the client-side emits a "message-sent" signal to the server
         },
       }
     );
-    setMessage("");
+    reset();
   }
+
+  function onError() {
+    console.log("ERR");
+  }
+
+  if (!chatRoom) return;
 
   return (
     <div className={styles.container}>
-      <h3>{selectedFriend.friend.friendUsername}</h3>
-      <div className={styles.chat}>
-        <div className={styles.chatMessages}>
+      <h3>
+        {selectedFriend.friend.friendUsername}{" "}
+        <button
+          className={styles.detailsButton}
+          onClick={() => setUserDetails(!userDetails)}
+        >
+          {userDetails === false ? "See details" : "Hide details"}
+        </button>
+      </h3>
+      <div
+        className={`${styles.chat} ${userDetails ? styles.isOtherShown : ""}`}
+      >
+        <div className={styles.chatMessages} ref={chatRef}>
           {currentChat.length > 0 &&
             currentChat.map((message, index) =>
               message.userId !== currentUser.id ? (
@@ -70,11 +103,14 @@ function OpenedChat({ selectedFriend, currentUser }) {
                   <img
                     className={styles.userImg}
                     src={selectedFriend.friend.friendImg}
-                    alt="FriendImg"
+                    alt="Friend"
                   />
                   <div className={styles.msgContentFriend}>
                     <p className={styles.date}>{message.date}</p>
                     <p className={styles.message}>{message.message}</p>
+                    {message.messageImg && (
+                      <img src={message.messageImg} alt="Image couldn't load" />
+                    )}
                   </div>
                 </div>
               ) : (
@@ -99,43 +135,25 @@ function OpenedChat({ selectedFriend, currentUser }) {
                 </div>
               )
             )}
-
-          {/* <div className={styles.friendMessage}>
-          <img
-          className={styles.userImg}
-          src="../../public/friendImg1.jpg"
-          alt="Friend"
-          />
-          <div className={styles.msgContentFriend}>
-          <p className={styles.date}>date</p>
-          <p className={styles.message}>
-          <img src="../../public/friendImg1.jpg" alt="Friend" />
-          </p>
-          </div>
-          </div>
-          
-          <div className={styles.userMessage}>
-          <div className={styles.msgContentUser}>
-          <p className={styles.date}>date</p>
-          <p className={styles.message}>
-          <img src="../../public/friendImg1.jpg" alt="Friend" />
-          You bet i have it
-          </p>
-          </div>
-          <img
-          className={styles.userImg}
-          src="../../public/friendImg1.jpg"
-          alt="User"
-          />
-          </div> */}
         </div>
         <div className={styles.chatInput}>
-          <form type="submit" onSubmit={(e) => onSend(e, message)}>
+          <form type="submit" onSubmit={handleSubmit(onSend, onError)}>
+            <label htmlFor="files">📁</label>
             <input
-              className={styles.chatInput}
+              id="files"
+              type="file"
+              accept="image/png, image/jpeg"
+              className={styles.fileInput}
+              {...register("messageImg", {
+                required: false,
+              })}
+            />
+            <input
+              className={styles.textInput}
               type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              {...register("message", {
+                required: false,
+              })}
             />
           </form>
         </div>

@@ -3,6 +3,7 @@ import {
   acceptFriendRequest,
   getFriendChat,
   getFriends,
+  removeFriend,
   sendFriendRequest,
   sendMessage,
 } from "./chatQueries";
@@ -53,10 +54,25 @@ export function useAcceptFriendRequest() {
 export function useSendMessage() {
   const queryClient = useQueryClient();
   const { mutate, data, error } = useMutation({
-    mutationFn: ({ message, currentUserId, friendId }) =>
-      sendMessage({ message, currentUserId, friendId }),
+    mutationFn: ({ message, messageImg, currentUserId, friendId }) =>
+      sendMessage({ message, messageImg, currentUserId, friendId }),
     onSuccess: () => queryClient.invalidateQueries("currentChat"),
     onError: () => toast.error("Message could not be sent."),
+  });
+
+  return { mutate, data, error };
+}
+
+export function useRemoveFriend() {
+  const queryClient = useQueryClient();
+  const { mutate, data, error } = useMutation({
+    mutationFn: ({ currentUserId, currentFriendId }) =>
+      removeFriend({ currentUserId, currentFriendId }),
+    onSuccess: () => {
+      toast.success("Friend succesfully removed.");
+      queryClient.invalidateQueries("friendList");
+    },
+    onError: () => toast.error("Friend could not be removed."),
   });
 
   return { mutate, data, error };

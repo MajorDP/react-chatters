@@ -1,39 +1,53 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import FriendDetails from "../etc/FriendDetails";
 import SideBar from "../etc/SideBar";
 import Chat from "./Chat";
 import styles from "./ChatContainer.module.css";
 import { useNavigate } from "react-router-dom";
+import UserSettings from "../etc/UserSettings";
 
+export const Context = createContext();
 function ChatContainer() {
   const navigate = useNavigate();
+  const [userDetails, setUserDetails] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
 
   //making sure a user is logged in before proceeding further
-  const user = JSON.parse(sessionStorage.getItem("user"));
+  const currentUser = JSON.parse(sessionStorage.getItem("user"));
 
   useEffect(
     function () {
-      if (user === null) {
+      if (currentUser === null) {
         navigate("/"); //if no user is logged in, we are redirected to /auth
       }
     },
-    [navigate, user]
+    [navigate, currentUser]
   );
 
   //returning a loader needed so that there are no errors between mounting the component and useEffect taking action
-  if (!user) return <div>Loading...</div>;
+  if (!currentUser) return <div>Loading...</div>;
 
   return (
-    <div className={styles.container}>
-      <SideBar setSelectedFriend={setSelectedFriend} currentUser={user} />
-      {selectedFriend !== null && (
-        <>
-          <Chat selectedFriend={selectedFriend} currentUser={user} />
-          <FriendDetails selectedFriend={selectedFriend} />
-        </>
-      )}
-    </div>
+    <Context.Provider
+      value={{
+        selectedFriend,
+        setSelectedFriend,
+        currentUser,
+        userDetails,
+        setUserDetails,
+      }}
+    >
+      <div className={styles.container}>
+        <SideBar />
+        {selectedFriend === currentUser.id && <UserSettings />}
+        {selectedFriend !== null && selectedFriend !== currentUser.id && (
+          <>
+            <Chat />
+            {userDetails && <FriendDetails />}
+          </>
+        )}
+      </div>
+    </Context.Provider>
   );
 }
 

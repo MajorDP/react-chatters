@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* eslint-disable no-unused-vars */
+import { useContext, useState } from "react";
 import styles from "./FriendList.module.css";
 
 import {
@@ -7,13 +8,19 @@ import {
   useSendFriendRequest,
 } from "../../services/useChatQueries";
 import { useQueryClient } from "react-query";
-function FriendList({ setSelectedFriend, currentUser }) {
+import toast from "react-hot-toast";
+import Friend from "./Friend";
+import { Context } from "./ChatContainer";
+function FriendList() {
+  const { setSelectedFriend, currentUser } = useContext(Context);
+
   const queryClient = useQueryClient();
   const [username, setUsername] = useState("");
 
   const currentUserId = currentUser.id;
   const currentUserUsername = currentUser.username;
   const { isLoading, data, error } = useGetFriends(currentUserId);
+
   const {
     mutate: acceptFriend,
     data: friendData,
@@ -32,10 +39,22 @@ function FriendList({ setSelectedFriend, currentUser }) {
   const currentFriendReqs = data.friendList.requests;
 
   function handleSendFriendReq(e, username) {
-    if (username === currentUserUsername) return;
     e.preventDefault();
-    sendRequest({ username, currentUserId, currentUserUsername });
 
+    if (username === "") {
+      return;
+    }
+    if (username === currentUserUsername) {
+      setUsername("");
+      return;
+    }
+    if (currentFriendList.some((obj) => obj.friendUsername === username)) {
+      toast.error(`You are already friends with ${username}`);
+      setUsername("");
+      return;
+    }
+
+    sendRequest({ username, currentUserId, currentUserUsername });
     setUsername("");
   }
 
@@ -58,6 +77,7 @@ function FriendList({ setSelectedFriend, currentUser }) {
           </button>
           <input
             placeholder="Add a friend..."
+            value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
         </form>
@@ -87,17 +107,11 @@ function FriendList({ setSelectedFriend, currentUser }) {
       <p className={styles.friendsLabel}>Your Friends</p>
       <ul>
         {currentFriendList.map((friend) => (
-          <li
+          <Friend
+            friend={friend}
+            setSelectedFriend={setSelectedFriend}
             key={friend.friendId}
-            className={styles.friend}
-            onClick={(selectedFriend) => setSelectedFriend({ friend })}
-          >
-            <img src={friend.friendImg} alt="userPic" />
-            <div className={styles.friendInfo}>
-              <p>{friend.friendUsername}</p>
-              <p>{friend.friendDescription}</p>
-            </div>
-          </li>
+          />
         ))}
       </ul>
     </div>

@@ -6,8 +6,8 @@
 }
 
 .container img {
-  width: 80px;
-  height: 80px;
+  min-width: 80px;
+  min-height: 80px;
   border: 1px solid goldenrod;
   border-radius: 50%;
   margin: 10px;
@@ -35,9 +35,36 @@
   width: 100%;
   margin-bottom: 1%;
   margin-left: 1%;
+
+  text-align: center;
 }
 
 .userInfo input::placeholder {
   color: whitesmoke;
   text-align: center;
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .container {
+    height: 13.5%;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .userInfo input {
+    font-size: 0.8rem;
+    text-overflow: ellipsis;
+  }
+}
+
+@media (max-width: 480px) {
+  .container img {
+    min-width: 70px;
+    min-height: 60px;
+  }
+
+  .userInfo p,
+  .userInfo form {
+    visibility: hidden;
+  }
 }

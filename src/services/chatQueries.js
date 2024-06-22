@@ -1,4 +1,4 @@
-import supabase from "./supabase";
+import supabase, { supabaseUrl } from "./supabase";
 
 export async function getFriends(currentUserId) {
   let { data: friendList, error } = await supabase
@@ -69,15 +69,12 @@ export async function acceptFriendRequest({ friendId, currentUserId, req }) {
   const currentUserObj = {
     friendId: currentUser.id,
     friendUsername: currentUser.username,
-    friendDescription: currentUser.description,
-    friendImg: currentUser.userImg,
   };
 
   //forming the object with the friend's information for the current user's friend list
   const friendUserObj = {
     friendId: req.friendId,
     friendUsername: req.friendUsername,
-    friendDescription: req.friendDescription,
     friendImg: req.friendImg,
   };
 
@@ -162,7 +159,12 @@ export async function acceptFriendRequest({ friendId, currentUserId, req }) {
     .select();
 }
 
-export async function sendMessage({ message, currentUserId, friendId }) {
+export async function sendMessage({
+  message,
+  messageImg,
+  currentUserId,
+  friendId,
+}) {
   //getting the chat of the users (both are the same)
   let { data: userChat, error } = await supabase
     .from("userChats")
@@ -176,13 +178,26 @@ export async function sendMessage({ message, currentUserId, friendId }) {
   const currentChat = userChat[0].chats;
   const date = new Date().toDateString();
 
-  const newMessage = {
+  let newMessage = {
     userId: currentUserId,
     date: date,
-    message: message,
   };
 
-  //updating the chat array
+  //if we have a text message, it is added to the newMessage object wchich will be posted inside the two user's chat logs in the database
+  if (message !== "") newMessage.message = message;
+
+  //same goes for if we have an image
+  if (messageImg !== undefined) {
+    let imageName = `${Math.random()}-${messageImg.name}`.replaceAll("/", "");
+    const imagePath = `${supabaseUrl}/storage/v1/object/public/chatImages/${imageName}`;
+    newMessage.messageImg = imagePath;
+
+    const { error: storageError } = await supabase.storage
+      .from("chatImages")
+      .upload(imageName, messageImg); //posting image
+  }
+
+  //updating the chat array witch whatever message we previously created above
   currentChat.push(newMessage);
 
   //updating both users' chat logs in database with the update chat array
@@ -203,4 +218,91 @@ export async function sendMessage({ message, currentUserId, friendId }) {
     .select();
 
   if (updateErrTwo) throw updateErrTwo;
+}
+
+export async function removeFriend({ currentUserId, currentFriendId }) {
+  //updating the friend list of the current user
+  let { data: friendList, error: friendListErr } = await supabase
+    .from("friendLists")
+    .select("friends")
+    .eq("id", currentUserId)
+    .single();
+
+  if (friendListErr) throw friendListErr;
+
+  const newFriendList = friendList.friends.filter(
+    (friend) => friend.friendId !== currentFriendId
+  );
+
+  const { data: friendListUpdateData, error: friendListUpdateErr } =
+    await supabase
+      .from("friendLists")
+      .update({ friends: newFriendList })
+      .eq("id", currentUserId)
+      .select();
+
+  if (friendListUpdateErr) throw friendListUpdateErr;
+
+  //updating friends friend list
+  let { data: friendsList, error: friendsListErr } = await supabase
+    .from("friendLists")
+    .select("friends")
+    .eq("id", currentFriendId)
+    .single();
+
+  if (friendsListErr) throw friendsListErr;
+
+  const newFriendsFriendList = friendsList.friends.filter(
+    (friend) => friend.friendId !== currentUserId
+  );
+
+  const { data: friendsListUpdateData, error: friendsListUpdateErr } =
+    await supabase
+      .from("friendLists")
+      .update({ friends: newFriendsFriendList })
+      .eq("id", currentFriendId)
+      .select();
+
+  if (friendsListUpdateErr) throw friendsListUpdateErr;
+
+  //deleting both users' chat logs from the database
+  const { error: ChatErrOne } = await supabase
+    .from("userChats")
+    .delete()
+    .eq("userId", currentFriendId)
+    .eq("friendId", currentUserId);
+
+  if (ChatErrOne) throw ChatErrOne;
+
+  const { error: ChatErrTwo } = await supabase
+    .from("userChats")
+    .delete()
+    .eq("userId", currentUserId)
+    .eq("friendId", currentFriendId);
+
+  if (ChatErrTwo) throw ChatErrTwo;
+}
+
+export async function getImage(id) {
+  let { data: userPfp, error } = await supabase
+    .from("userPfps")
+    .select("userPfp")
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+
+  return userPfp;
+}
+
+export async function getDescription(id) {
+  let { data: friendDesc, error } = await supabase
+    .from("friendLists")
+    .select("userDescription")
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+
+  return friendDesc;
 }

@@ -1,5 +1,6 @@
 .container {
   width: 33%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.404);
 }
 
@@ -30,17 +31,38 @@ p {
 }
 
 .friendOptions {
-  width: 95%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  width: 85%;
 }
 
-.removeBtn,
-.blockBtn {
+.friendInfo button {
+  border: 1px solid rgb(165, 165, 165);
+}
+
+.removeBtn {
   width: 45%;
   font-weight: 500;
   font-size: medium;
-  background-color: red;
+  background-color: rgba(156, 4, 4, 0.795);
   border: 0;
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .friendInfo {
+    font-size: 0.8rem;
+  }
+
+  .friendInfo button {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .friendInfo {
+    font-size: 0.8rem;
+    width: 100%;
+  }
+
+  .removeBtn {
+    width: 80%;
+  }
 }
