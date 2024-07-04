@@ -4,8 +4,8 @@ Built using React Query and Supabase
 
 - Added the option of user description and profile picture changes
 - Users can now send each other images in chats
-  _Added responsive design for 480, 768 and 1200 width_
-  _Added notifications for new received messages inside friend list_
+- **Added responsive design for 480, 768 and 1200 width**
+- **Added notifications for new received messages inside friend list**
 
 !!!IMPORTANT!!!
 
