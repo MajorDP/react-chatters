@@ -71,6 +71,7 @@
 
 .friend {
   display: flex;
+  flex-direction: row;
   border-bottom: 1px solid gray;
   padding-right: 1rem;
   font-size: 0.8rem;
@@ -83,6 +84,11 @@
   border: 1px solid goldenrod;
   border-radius: 50%;
   margin: 10px;
+}
+
+.friend span {
+  margin: auto;
+  padding-left: 8rem;
 }
 
 .friendInfo {
@@ -112,6 +118,11 @@
   .container {
     height: 87.1%;
   }
+
+  .friend span {
+    margin: auto;
+    padding-left: 4rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -125,5 +136,12 @@
 
   .friend p {
     visibility: hidden;
+  }
+}
+
+@media (max-width: 768px) {
+  .friend span {
+    margin: auto;
+    padding-left: 1rem;
   }
 }

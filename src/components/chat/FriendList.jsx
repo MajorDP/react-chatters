@@ -108,6 +108,7 @@ function FriendList() {
       <ul>
         {currentFriendList.map((friend) => (
           <Friend
+            currentUserId={currentUser.id}
             friend={friend}
             setSelectedFriend={setSelectedFriend}
             key={friend.friendId}

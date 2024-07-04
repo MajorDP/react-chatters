@@ -21,7 +21,6 @@ function OpenedChat() {
     selectedFriendId,
     currentUserId
   );
-  console.log(selectedFriend.friend);
 
   const chatRef = useRef(null);
 

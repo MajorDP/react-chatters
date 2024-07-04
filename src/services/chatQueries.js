@@ -19,6 +19,8 @@ export async function getFriendChat(friendId, userId) {
     .eq("userId", userId)
     .single();
 
+  await toggleIsSeen(userId, friendId, true);
+
   return { friendChats, error };
 }
 
@@ -218,6 +220,8 @@ export async function sendMessage({
     .select();
 
   if (updateErrTwo) throw updateErrTwo;
+
+  await toggleIsSeen(friendId, currentUserId, false);
 }
 
 export async function removeFriend({ currentUserId, currentFriendId }) {
@@ -305,4 +309,24 @@ export async function getDescription(id) {
   if (error) throw error;
 
   return friendDesc;
+}
+
+export async function toggleIsSeen(userId, friendId, bool) {
+  const { data, error } = await supabase
+    .from("userChats")
+    .update({ isSeen: bool })
+    .eq("userId", userId)
+    .eq("friendId", friendId)
+    .select();
+}
+
+export async function getIsSeen(userId, friendId) {
+  let { data, error } = await supabase
+    .from("userChats")
+    .select("isSeen")
+    .eq("userId", userId)
+    .eq("friendId", friendId)
+    .single();
+
+  return data;
 }

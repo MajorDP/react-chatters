@@ -3,6 +3,7 @@ import {
   acceptFriendRequest,
   getFriendChat,
   getFriends,
+  getIsSeen,
   removeFriend,
   sendFriendRequest,
   sendMessage,
@@ -19,11 +20,13 @@ export function useGetFriends(currentUserId) {
 }
 
 export function useGetFriendsChat(friendId, currentUserId) {
+  const queryClient = useQueryClient();
   const { isLoading, data, error } = useQuery({
     queryKey: ["currentChat", friendId, currentUserId],
     queryFn: () => getFriendChat(friendId, currentUserId),
   });
 
+  queryClient.invalidateQueries("isSeen");
   return { isLoading, data, error };
 }
 
@@ -76,4 +79,14 @@ export function useRemoveFriend() {
   });
 
   return { mutate, data, error };
+}
+
+//for notifications for new messages
+export function useGetIsSeen(userId, friendId) {
+  const { isLoading, data, error } = useQuery({
+    queryKey: ["isSeen", userId, friendId],
+    queryFn: () => getIsSeen(userId, friendId),
+  });
+
+  return { isLoading, data, error };
 }
