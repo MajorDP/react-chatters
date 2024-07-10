@@ -8,6 +8,7 @@ Built using React Query and Supabase
 - **Added notifications for new received messages inside friend list**
 
 **Added log out option in the user settings tab:**
+<br>
 _-To acces, press your user's profile picture on the topmost left corner when logged in_
 
 !!!IMPORTANT!!!
