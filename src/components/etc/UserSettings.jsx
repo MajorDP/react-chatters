@@ -4,8 +4,9 @@ import styles from "./UserSettings.module.css";
 import { useNavigate } from "react-router-dom";
 import FriendList from "../chat/FriendList";
 import { useForm } from "react-hook-form";
-import { updateUser } from "../../services/userAuth";
+import { logOut, updateUser } from "../../services/userAuth";
 import { useUpdateUser } from "../../services/useUserAuth";
+import toast from "react-hot-toast";
 function UserSettings() {
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
@@ -35,6 +36,11 @@ function UserSettings() {
     console.error(err);
   }
 
+  function onLogOut() {
+    logOut();
+    navigate("/");
+    toast.success("Logging out...");
+  }
   return (
     <div className={styles.container}>
       <h3>{user.username} </h3>
@@ -73,6 +79,9 @@ function UserSettings() {
           <button type="submit">Save Changes</button>
         </div>
       </form>
+      <button className={styles.logOutBtn} onClick={() => onLogOut()}>
+        Log out
+      </button>
     </div>
   );
 }

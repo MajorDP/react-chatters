@@ -11,6 +11,12 @@
   border: 1px solid goldenrod;
   border-radius: 50%;
   margin: 10px;
+  cursor: pointer;
+}
+
+.container img:hover {
+  box-shadow: 0 0 20px goldenrod;
+  transition: 0.3s;
 }
 
 .userInfo {

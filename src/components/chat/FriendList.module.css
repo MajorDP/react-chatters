@@ -144,4 +144,7 @@
     margin: auto;
     padding-left: 1rem;
   }
+  .container {
+    height: 81%;
+  }
 }

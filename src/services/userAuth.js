@@ -78,6 +78,10 @@ export async function login({ email, password }) {
   return { currentUser, error };
 }
 
+export async function logOut() {
+  sessionStorage.clear();
+}
+
 export async function setDescription({ userId, description }) {
   const { data, error } = await supabase
     .from("friendLists")
