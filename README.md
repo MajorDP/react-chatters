@@ -11,6 +11,8 @@ Built using React Query and Supabase
 <br>
 _-To acces, press your user's profile picture on the topmost left corner when logged in_
 
+<h2>Create an account, add your friends and chat in real time.</h2>
+
 !!!IMPORTANT!!!
 
 FOR THE CHATS TO WORK IN REALTIME, the server.js file MUST BE started via:
