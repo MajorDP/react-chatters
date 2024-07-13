@@ -1,7 +1,20 @@
 # ReactChatters
 
-Built using React Query and Supabase
+This project represents a chat between users where they can:
+1) Register;
+2) Edit profile - image and description;
+3) Add other users as friend based on username;
+4) Remove friends from list;
+5) Chat in real time, implemented using Socket.io;
 
+
+
+
+Built using React, React Query and Supabase.
+
+
+
+#UPDATES:
 - Added the option of user description and profile picture changes
 - Users can now send each other images in chats
 - **Added responsive design for 480, 768 and 1200 width**
